@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:auth_buttons/auth_buttons.dart';
+import 'package:flutter_forward_demo/utils/app_dimension.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool _hidePass = true;
 
@@ -26,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 25,
               ),
               const Text(
-                'Welcome Back!',
+                'Welcome!\nSignUp Now',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -49,6 +50,30 @@ class _LoginScreenState extends State<LoginScreen> {
                 key: formKey,
                 child: Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 15,
+                      ),
+                      child: TextFormField(
+                        controller: _nameController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Name cannot be empty';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.person),
+                          labelText: 'Name',
+                          hintText: 'example',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 10,
@@ -110,6 +135,44 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      child: TextFormField(
+                        obscureText: _hidePass,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Password is empty';
+                          } else if (value != _passwordController.text) {
+                            return 'Password does not Match';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.password),
+                          labelText: 'Confirm Password',
+                          hintText: '********',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _hidePass = !_hidePass;
+                              });
+                            },
+                            icon: Icon(
+                              _hidePass
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -128,22 +191,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           context, '/home', (route) => false);
                     }
                   },
-                  child: Text('Login'),
+                  child: Text('Sign Up'),
                   style: ButtonStyle(
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)))),
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  print('sign up pressed');
-                  Navigator.pushNamed(context, "/signup");
-                },
-                child: Text('Sign Up'),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
+              verticalSpace(15.0),
               Row(
                 children: const [
                   Expanded(
@@ -163,22 +217,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              GoogleAuthButton(
+              TextButton(
                 onPressed: () {
-                  print('Google');
+                  Navigator.pushNamed(context, "/login");
                 },
-                style: const AuthButtonStyle(
-                  buttonType: AuthButtonType.secondary,
-                  buttonColor: Colors.blue,
-                  iconBackground: Colors.white,
-                  textStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
+                child: Text('Log In'),
+              ),
+              const SizedBox(
+                height: 15,
               ),
             ],
           ),
