@@ -13,7 +13,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (context) => const SignUpScreen());
 
       case '/home':
-        return MaterialPageRoute(builder: (context) => const HomeScreen());
+        return MaterialPageRoute(builder: (context) => HomeScreen());
     }
     return null;
   }

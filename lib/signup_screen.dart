@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_forward_demo/utils/app_dimension.dart';
 
@@ -27,7 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 25,
               ),
               const Text(
-                'Welcome!\nSignUp Now',
+                '  Welcome!\nSignUp Now',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -183,12 +185,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 40,
                 width: 250,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      print(_emailController.text);
-                      print(_passwordController.text);
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/home', (route) => false);
+                      await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                              email: _emailController.text,
+                              password: _passwordController.text);
+
+                      await FirebaseAuth.instance.currentUser!
+                          .updateDisplayName(_nameController.text);
+
+                      // print(_emailController.text);
+                      // print(_passwordController.text);
+                      Navigator.pushReplacementNamed(context, '/home');
                     }
                   },
                   child: Text('Sign Up'),
@@ -197,26 +206,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           borderRadius: BorderRadius.circular(20)))),
                 ),
               ),
-              verticalSpace(15.0),
-              Row(
-                children: const [
-                  Expanded(
-                    child: Divider(
-                      thickness: 2,
-                      indent: 20,
-                      endIndent: 15,
-                    ),
-                  ),
-                  Text('Other Options'),
-                  Expanded(
-                    child: Divider(
-                      thickness: 2,
-                      indent: 15,
-                      endIndent: 20,
-                    ),
-                  ),
-                ],
-              ),
+              // verticalSpace(15.0),
+              // Row(
+              //   children: const [
+              //     Expanded(
+              //       child: Divider(
+              //         thickness: 2,
+              //         indent: 20,
+              //         endIndent: 15,
+              //       ),
+              //     ),
+              //     Text('Other Options'),
+              //     Expanded(
+              //       child: Divider(
+              //         thickness: 2,
+              //         indent: 15,
+              //         endIndent: 20,
+              //       ),
+              //     ),
+              //   ],
+              // ),
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, "/login");
